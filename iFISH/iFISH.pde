@@ -24,7 +24,7 @@ Movie MovieAway;
 Movie MovieClean;
 Movie MovieBack;
 int action=0;
-int inital=0;
+int inital=0,flag=0;
 float delay2S=0;
 
 void setup() {
@@ -36,9 +36,8 @@ void setup() {
   MovieClean =new Movie(this, "MovieClean.mp4");
   MovieBack =new Movie(this, "MovieFishBack1.mp4");
   MovieStart.loop();
-  //MovieFishAway.jump(0);
-  MovieAway.loop();
- // MovieClean.loop();
+  MovieAway.play();
+  MovieClean.loop();
 }
 
 void movieEvent(Movie m) {
@@ -50,19 +49,23 @@ void draw() {
   if (action==0 & inital==0) {                        // a=0,ini=0    inital loop play MovieStart.mp4
     image(MovieStart, 0, 0, width, height);
     delay2S=MovieStart.time();
-    if(delay2S>36){
+    if(delay2S>35.8){
     delay2S=0;}
-    
+    flag=1;
+    MovieAway.jump(MovieStart.time()+0.2);
   } else { 
     //action=0;                                       // act=1,ini=0  have action play MovieFishAway.mp4
     inital=1;
-    //MovieAway.play();                                 
+    flag=2;
+    MovieAway.play();                                 
     image(MovieAway, 0, 0, width, height);              
     if (MovieAway.time()>delay2S+1.5) {  
-      MovieClean.play();
+      //MovieClean.play();
+      flag=3;
       image(MovieClean, 0, 0, width, height);          //and then loop play MovieClean.mp4
       //println("MovieClean = "+MovieClean.time());
       if (action==0 & inital==1) {                     //act=0,act=1 
+        flag=4;
         MovieBack.play();
         image(MovieBack, 0, 0, width, height);
         if (MovieBack.time()>MovieClean.duration()-0.1) {
@@ -78,10 +81,13 @@ void draw() {
       }
     }
   }
-  println("action="+action+"   inital="+inital);
-  println("MovieStartTime = "+MovieStart.time()+"  MovieClean = "+MovieClean.time());
-  println("MovieAwayTime = "+MovieAway.time(),"   MovieBackTime="+MovieBack.time());
-  println("Delay2S="+delay2S);
+  println("action="+action+"   inital="+inital+"   flag="+flag);
+  print("MovieStartTime = "+MovieStart.time());
+  print("   MovieAwayTime = "+MovieAway.time());
+  print("  MovieClean = "+MovieClean.time());
+
+  println("  MovieBackTime="+MovieBack.time());
+ // println("Delay2S="+delay2S);
   
 }
 
